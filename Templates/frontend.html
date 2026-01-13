@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Peptide Screening Platform</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated DNA Background */
+        .dna-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .dna-strand {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #00f5ff, #7b2cbf, #ff006e);
+            animation: dnaFloat 20s ease-in-out infinite;
+        }
+
+        .dna-strand:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .dna-strand:nth-child(2) { left: 30%; animation-delay: 2s; }
+        .dna-strand:nth-child(3) { left: 50%; animation-delay: 4s; }
+        .dna-strand:nth-child(4) { left: 70%; animation-delay: 6s; }
+        .dna-strand:nth-child(5) { left: 90%; animation-delay: 8s; }
+
+        @keyframes dnaFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(5deg); }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #00f5ff, transparent);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, -100px) scale(1.5); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Header */
+        .hero-header {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5em;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00f5ff, #7b2cbf, #ff006e, #ffd60a);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            font-size: 1.8em;
+            color: #00f5ff;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .tagline {
+            color: #b19cd9;
+            font-size: 1.2em;
+            font-weight: 300;
+            margin-top: 15px;
+        }
+
+        /* Molecular structure decorations */
+        .molecule-decoration {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            opacity: 0.3;
+            animation: rotate 20s linear infinite;
+        }
+
+        .molecule-left {
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+
+        .molecule-right {
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 40px;
+            border: 2px solid rgba(0, 245, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .section:hover {
+            border-color: rgba(0, 245, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 245, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.1), transparent);
+            animation: sectionGlow 6s ease-in-out infinite;
+        }
+
+        @keyframes sectionGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(10%, 10%); }
+        }
+
+        .section h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f5ff;
+            font-size: 2em;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed #00f5ff;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            background: rgba(0, 245, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-area:hover {
+            border-color: #7b2cbf;
+            background: rgba(123, 44, 191, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-area.dragover {
+            background: rgba(0, 245, 255, 0.2);
+            border-color: #ffd60a;
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            animation: uploadFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes uploadFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .upload-text {
+            color: #00f5ff;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            color: #b19cd9;
+            font-size: 1em;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-info {
+            background: rgba(0, 245, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 4px solid #00f5ff;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-info.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .format-info {
+            background: rgba(123, 44, 191, 0.1);
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 0.95em;
+            margin-bottom: 25px;
+            color: #b19cd9;
+            border: 1px solid rgba(123, 44, 191, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Slider */
+        .slider-container {
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #00f5ff;
+            font-size: 1.1em;
+        }
+
+        .slider {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #00f5ff, #7b2cbf);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f5ff, #7b2cbf);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.8);
+            transition: all 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 25px rgba(0, 245, 255, 1);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f5ff, #7b2cbf);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.8);
+        }
+
+        .slider-value {
+            display: inline-block;
+            background: linear-gradient(135deg, #00f5ff, #7b2cbf);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin-left: 15px;
+            box-shadow: 0 4px 15px rgba(0, 245, 255, 0.4);
+            animation: valueGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes valueGlow {
+            0%, 100% { box-shadow: 0 4px 15px rgba(0, 245, 255, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(0, 245, 255, 0.8); }
+        }
+
+        /* Analyze Button */
+        .analyze-btn {
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(135deg, #00f5ff, #7b2cbf, #ff006e);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .analyze-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .analyze-btn:hover::before {
+            left: 100%;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 245, 255, 0.6);
+            animation: buttonGradient 2s ease infinite;
+        }
+
+        @keyframes buttonGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .analyze-btn:disabled {
+            background: linear-gradient(135deg, #555, #777);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Area */
+        .results-area {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 15px;
+            min-height: 400px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: #00f5ff;
+            border: 2px solid rgba(0, 245, 255, 0.3);
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .results-area::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .results-area::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .results-area::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00f5ff, #7b2cbf);
+            border-radius: 10px;
+        }
+
+        .results-area.empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b19cd9;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1em;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .dna-loader {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            position: relative;
+        }
+
+        .dna-loader::before,
+        .dna-loader::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00f5ff, #7b2cbf);
+            animation: dnaRotate 2s ease-in-out infinite;
+        }
+
+        .dna-loader::before {
+            left: 0;
+            animation-delay: 0s;
+        }
+
+        .dna-loader::after {
+            right: 0;
+            animation-delay: 1s;
+        }
+
+        @keyframes dnaRotate {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(40px) scale(0.8); opacity: 0.5; }
+        }
+
+        .loading-text {
+            color: #00f5ff;
+            font-size: 1.2em;
+            font-weight: 600;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Error Message */
+        .error {
+            background: rgba(255, 0, 110, 0.2);
+            color: #ff006e;
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+            border: 2px solid #ff006e;
+            position: relative;
+            z-index: 1;
+        }
+
+        .error.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-title {
+                font-size: 4em;
+            }
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5em;
+            }
+            .subtitle {
+                font-size: 1.3em;
+            }
+            .hero-header {
+                padding: 40px 20px;
+            }
+            .molecule-decoration {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="dna-background">
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+        <div class="dna-strand"></div>
+    </div>
+
+    <div class="container">
+        <!-- Hero Header -->
+        <div class="hero-header">
+            <!-- Molecular Decorations -->
+            <svg class="molecule-decoration molecule-left" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="8" fill="#00f5ff"/>
+                <circle cx="30" cy="30" r="6" fill="#7b2cbf"/>
+                <circle cx="70" cy="30" r="6" fill="#ff006e"/>
+                <circle cx="30" cy="70" r="6" fill="#ffd60a"/>
+                <circle cx="70" cy="70" r="6" fill="#00f5ff"/>
+                <line x1="50" y1="50" x2="30" y2="30" stroke="#00f5ff" stroke-width="2"/>
+                <line x1="50" y1="50" x2="70" y2="30" stroke="#00f5ff" stroke-width="2"/>
+                <line x1="50" y1="50" x2="30" y2="70" stroke="#00f5ff" stroke-width="2"/>
+                <line x1="50" y1="50" x2="70" y2="70" stroke="#00f5ff" stroke-width="2"/>
+            </svg>
+
+            <svg class="molecule-decoration molecule-right" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="8" fill="#ff006e"/>
+                <circle cx="20" cy="50" r="6" fill="#00f5ff"/>
+                <circle cx="80" cy="50" r="6" fill="#7b2cbf"/>
+                <circle cx="50" cy="20" r="6" fill="#ffd60a"/>
+                <circle cx="50" cy="80" r="6" fill="#00f5ff"/>
+                <line x1="50" y1="50" x2="20" y2="50" stroke="#ff006e" stroke-width="2"/>
+                <line x1="50" y1="50" x2="80" y2="50" stroke="#ff006e" stroke-width="2"/>
+                <line x1="50" y1="50" x2="50" y2="20" stroke="#ff006e" stroke-width="2"/>
+                <line x1="50" y1="50" x2="50" y2="80" stroke="#ff006e" stroke-width="2"/>
+            </svg>
+
+            <div class="title-container">
+                <h1 class="main-title">🧬 PEPTIDE SCREENING</h1>
+                <p class="subtitle">Advanced Machine Learning Analysis Platform</p>
+                <p class="tagline">Unlock the Power of Peptide Discovery with AI</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Input Configuration Section -->
+            <div class="section">
+                <h2><span class="section-icon">⚙️</span>Input Configuration</h2>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">🧪</div>
+                    <p class="upload-text">Click to Upload or Drag & Drop</p>
+                    <p class="upload-subtext">CSV • TXT • FASTA formats supported</p>
+                </div>
+                
+                <input type="file" id="fileInput" class="file-input" accept=".csv,.txt,.fasta,.fa">
+                
+                <div class="file-info" id="fileInfo">
+                    <strong>📄 Selected File:</strong> <span id="fileName"></span><br>
+                    <strong>📊 Size:</strong> <span id="fileSize"></span>
+                </div>
+
+                <div class="format-info">
+                    <strong>🔬 Supported Formats:</strong><br>
+                    • CSV with 'sequence' column<br>
+                    • FASTA with headers<br>
+                    • TXT (one sequence per line)
+                </div>
+
+                <div class="slider-container">
+                    <label>
+                        🎯 Top Peptides to Display 
+                        <span class="slider-value" id="sliderValue">30</span>
+                    </label>
+                    <input type="range" min="10" max="100" value="30" class="slider" id="topPeptidesSlider">
+                </div>
+
+                <button class="analyze-btn" id="analyzeBtn" disabled>
+                    🚀 ANALYZE SEQUENCES
+                </button>
+
+                <div class="error" id="errorMsg"></div>
+            </div>
+
+            <!-- Analysis Summary Section -->
+            <div class="section">
+                <h2><span class="section-icon">📊</span>Analysis Summary</h2>
+                
+                <div class="loading" id="loading">
+                    <div class="dna-loader"></div>
+                    <p class="loading-text">Analyzing peptide sequences...</p>
+                </div>
+
+                <div class="results-area empty" id="results">
+                    🔬 Upload sequences and click ANALYZE to begin<br><br>
+                    Awaiting your peptide data...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particles
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            document.querySelector('.dna-background').appendChild(particle);
+        }
+
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const slider = document.getElementById('topPeptidesSlider');
+        const sliderValue = document.getElementById('sliderValue');
+        const results = document.getElementById('results');
+        const loading = document.getElementById('loading');
+        const errorMsg = document.getElementById('errorMsg');
+
+        let selectedFile = null;
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        slider.addEventListener('input', (e) => {
+            sliderValue.textContent = e.target.value;
+        });
+
+        function handleFile(file) {
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.classList.add('show');
+            analyzeBtn.disabled = false;
+            errorMsg.classList.remove('show');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        analyzeBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            results.classList.add('empty');
+            results.innerHTML = '🔬 Upload sequences and click ANALYZE to begin<br><br>Awaiting your peptide data...';
+            loading.classList.add('show');
+            analyzeBtn.disabled = true;
+            errorMsg.classList.remove('show');
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('top_n', slider.value);
+
+            try {
+                // TODO: Replace with your actual backend URL
+                const response = await fetch('YOUR_BACKEND_URL/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                showError(`⚠️ Error: ${error.message}. Please check your backend connection.`);
+            } finally {
+                loading.classList.remove('show');
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        function displayResults(data) {
+            results.classList.remove('empty');
+            
+            let output = '═══════════════════════════════════════════════════\n';
+            output += '    🧬 PEPTIDE SCREENING ANALYSIS COMPLETE 🧬\n';
+            output += '═══════════════════════════════════════════════════\n\n';
+            
+            output += '📊 DATASET OVERVIEW:\n';
+            output += '─────────────────────────────────────────────────\n';
+            output += `   • Total Sequences Analyzed: ${data.total_sequences || 'N/A'}\n`;
+            output += `   • Successfully Processed: ${data.processed_sequences || 'N/A'}\n`;
+            output += `   • Top Peptides Displayed: ${data.top_peptides_count || 'N/A'}\n\n`;
+            
+            if (data.top_peptide) {
+                output += '🏆 TOP-RANKED PEPTIDE:\n';
+                output += '─────────────────────────────────────────────────\n';
+                output += `   🆔 Sequence ID: ${data.top_peptide.id}\n`;
+                output += `   🧬 Sequence: ${data.top_peptide.sequence}\n`;
+                output += `   ⭐ Predicted Score: ${data.top_peptide.score}\n`;
+                output += `   📏 Length: ${data.top_peptide.length} amino acids\n\n`;
+                
+                output += '🔬 KEY PROPERTIES:\n';
+                output += '─────────────────────────────────────────────────\n';
+                output += `   ⚡ Net Charge: ${data.top_peptide.net_charge}\n`;
+                output += `   💧 Hydrophobicity: ${data.top_peptide.hydrophobicity}\n`;
+                output += `   📈 Boman Index: ${data.top_peptide.boman_index}\n`;
+                output += `   🌊 Solubility: ${data.top_peptide.solubility}\n`;
+                output += `   🔄 Hydrophobic Moment: ${data.top_peptide.hydrophobic_moment}\n`;
+                output += '\n═══════════════════════════════════════════════════\n';
+            }
+
+            results.textContent = output;
+        }
+
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.classList.add('show');
+            results.classList.add('empty');
+            results.innerHTML = '❌ Analysis failed. Please try again.';
+        }
+    </script>
+</body>
